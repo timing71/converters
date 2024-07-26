@@ -17,11 +17,17 @@ module.exports = {
   ],
   rules: {
     'brace-style': ['error', 'stroustrup'],
+    'comma-dangle': ['warn', 'only-multiline'],
     'dot-notation': 'off',
     'operator-linebreak': ['warn', 'after'],
     'import/extensions': ['error', 'ignorePackages'],
+    'padded-blocks': 'off',
     'quote-props': 'off',
     'semi': ['warn', 'always'],
-    'space-before-function-paren': ['error', 'never']
+    'space-before-function-paren': ['error', {
+      'anonymous': 'always',
+      'named': 'never',
+      'asyncArrow': 'always'
+    }]
   }
 };
