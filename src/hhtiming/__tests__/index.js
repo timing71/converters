@@ -1,4 +1,5 @@
-import { DecodeError, decodeLine } from '../index.js';
+import { DecodeError, decodeLine, HHTimingConverter } from '../index.js';
+import fs from 'fs';
 
 const VALID_B64_ENCODED_DATA = 'PFBBU1M+DQogIDxJRD5mMGZmMzk4Zi00OWNhLTQ3MzItODA2Ni0wZTY1YzZlMTBlZGQ8L0lEPg0KICA8RFQ+MDIuMDcuMjAyMyAwMjo1MDozOC4wOTY8L0RUPg0KICA8QkI+OTExPC9CQj4NCiAgPElUPjM5ODExPC9JVD4NCiAgPExQPjIzNjwvTFA+DQogIDxTVD5JMTwvU1Q+DQogIDxWRT4yNjIuNzczPC9WRT4NCiAgPERSPjQ8L0RSPg0KPC9QQVNTPg==';
 
@@ -37,6 +38,17 @@ describe('HH Timing', () => {
     it('throws exception if decoded XML is junk', () => {
       const invalidXML = btoa('<foo><bar></foos>');
       expect(decodeLine(`2023-07-02 09:38:22.306395|${invalidXML}`)).rejects.toThrow(DecodeError);
+    });
+  });
+
+  describe('HHTimingConverter', () => {
+    it('parses and converts a file stream', async () => {
+      const inputStream = fs.createReadStream(
+        'src/hhtiming/__tests__/test.hhreplay',
+        { highWaterMark: 8192 } // Deliberately small to force handling multiple chunks
+      );
+      const subject = new HHTimingConverter();
+      await subject.convert(inputStream);
     });
   });
 });
